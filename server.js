@@ -1,0 +1,11 @@
+const express = require("express")
+const app = express()
+const {getAllBooks, getBookByGenre, updateBookISBN,deleteBookByName,addBook} = require("./controllers/books")
+app.use(express.json())
+
+app.get("/", getAllBooks)
+app.get("/:genre", getBookByGenre)
+app.put("/update", updateBookISBN)
+app.delete("/:name",deleteBookByName)
+app.post("/add", addBook)
+app.listen(3000)
