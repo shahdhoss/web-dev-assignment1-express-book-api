@@ -31,3 +31,29 @@ exports.deleteBookByName = async (req,res) =>{
     const name = req.params.name
     await connection.query("delete from book where name = $1", [name])
 }
+
+exports.borrowBook = async (req, res) =>{
+    const book_name = req.params.name
+    const result = await connection.query("select is_available from book where name = $1", [book_name])
+    if (result.rows[0].is_available == true){
+        await connection.query("update book set is_available = False where name = $1", [book_name])
+        res.json("book has been borrowed")
+    }
+    else{
+        res.json("book is unavailable")
+    }
+}
+
+exports.returnBook = async (req,res)=>{
+    const book_name = req.params.name
+    const result = await connection.query("select is_available from book where name = $1", [book_name])
+    if (result.rows[0].is_available == false){
+        await connection.query("update book set is_available = True where name = $1", [book_name])
+        res.json("book has been returned")
+    }
+    else{
+        res.json("book isn't even borrowed")
+    }
+}
+
+
